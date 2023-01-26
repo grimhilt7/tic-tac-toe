@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="player-select">
+      <img src="./images/logo.svg" alt="" width="180px" draggable="false" (dragstart)="false" class="unselectable" />
+      <div class="main">
+        <input
+          type="image"
+          src="./images/human.svg"
+          width="80px"
+          id="human"
+          draggable="false"
+          (dragstart)="false"
+          class="unselectable"
+        />
+        <input
+          type="image"
+          src="./images/robot.svg"
+          width="80px"
+          id="robot"
+          draggable="false"
+          (dragstart)="false"
+          class="unselectable"
+        />
+      </div>
+    </div>
+    <div class="game">
+      <div class="players">
+        <!-- for the bot mode they'll be you and bot -->
+        <div class="player player-1" draggable="true">Player X</div>
+        <div class="player player-2" draggable="true">Player O</div>
+      </div>
+      <div class="board">
+        <div class="tile tile-1"></div>
+        <div class="tile tile-2"></div>
+        <div class="tile tile-3"></div>
+        <div class="tile tile-4"></div>
+        <div class="tile tile-5"></div>
+        <div class="tile tile-6"></div>
+        <div class="tile tile-7"></div>
+        <div class="tile tile-8"></div>
+        <div class="tile tile-9"></div>
+      </div>
+      <div class="buttons">
+        <button id="restart">Restart</button>
+        <button id="main">Main</button>
+      </div>
+    </div>
+    <footer>
+      <a href="https://github.com/grimhilt7" target="_blank"
+        ><img src="./images/github.svg" width="30px" height="30px"
+      /></a>
+    </footer>
+  </body>
+</html>
