@@ -32,7 +32,7 @@ body {
 }
 
 .unselectable {
-  user-drag: none; 
+  user-drag: none;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-drag: none;
@@ -51,6 +51,7 @@ body {
 
 /* player select */
 .player-select {
+  z-index: 99;
   height: calc(100% - 50px);
 
   background-color: var(--color-black);
@@ -82,6 +83,7 @@ body {
 
 /* game */
 .game {
+  position: relative;
   margin: auto;
 
   display: flex;
@@ -96,6 +98,8 @@ body {
   justify-content: space-between;
 
   width: 300px;
+
+  position: relative;
 }
 
 .player {
@@ -108,29 +112,43 @@ body {
   justify-content: center;
 
   font-size: 16px;
+
+  transition: transform 0.5s;
 }
 
-@keyframes slideup {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-10px);
-  }
+.winner {
+  position: absolute;
+
+  opacity: 0;
+
+  width: 300px;
+  height: 50px;
+  background-color: var(--color-green);
+  color: var(--color-white);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: opacity 0.2s;
 }
 
-.player:hover {
+.winner.win {
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+/* an indicator to determine whose turn */
+.slide-up {
   background-color: var(--color-black);
   color: var(--color-white);
-  transition: var(--transition);
-  animation: slideup 1s forwards;
+  transform: translateY(-10px);
+  transition: var(--transition), transform 0.5s;
 }
 
 /* board */
-
 .tile:hover {
-  background-color: var(--color-black);
-  transition: background-color 0.1s;
+  cursor: pointer;
 }
 
 .tile:nth-child(1),
