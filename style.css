@@ -1,3 +1,4 @@
+/* box sizing */
 html {
   box-sizing: border-box;
 }
@@ -29,6 +30,7 @@ body {
 /* custom effects */
 .slide {
   transform: translateY(-100%);
+  transition: transform 0.4s;
 }
 
 .unselectable {
@@ -63,8 +65,6 @@ body {
   right: 0;
   text-align: center;
 
-  transition: var(--transition), transform 0.4s ease-in-out;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -73,12 +73,32 @@ body {
 
 .main {
   display: flex;
-  justify-content: center;
 }
 
-.main input:hover {
-  background-color: var(--color-green);
-  transition: var(--transition);
+.main > div:nth-child(1) {
+  width: 80px;
+  height: 80px;
+
+  background-image: url("./images/human.svg");
+  transition: background-image 0.2s;
+}
+
+.main > div:nth-child(2) {
+  width: 80px;
+  height: 80px;
+
+  background-image: url("./images/robot.svg");
+  transition: background-image 0.2s;
+}
+
+.main > div:nth-child(1):hover {
+  background-image: url("./images/human-green.svg");
+  transition: background-image 0.2s;
+}
+
+.main > div:nth-child(2):hover {
+  background-image: url("./images/robot-green.svg");
+  transition: background-image 0.2s;
 }
 
 /* game */
@@ -125,7 +145,7 @@ body {
   height: 50px;
   background-color: var(--color-green);
   color: var(--color-white);
-  
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -133,24 +153,42 @@ body {
   transition: opacity 0.2s;
 }
 
-.winner.win {
+.winner.visible {
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.draw {
+  position: absolute;
+
+  opacity: 0;
+
+  width: 300px;
+  height: 50px;
+  background-color: var(--color-green);
+  color: var(--color-white);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: opacity 0.2s;
+}
+
+.draw.visible {
   opacity: 1;
   transition: opacity 0.2s;
 }
 
 /* an indicator to determine whose turn */
-.slide-up {
+.highlighted {
   background-color: var(--color-black);
   color: var(--color-white);
   transform: translateY(-10px);
-  transition: var(--transition), transform 0.5s;
+  transition: var(--transition), transform 0.4s;
 }
 
 /* board */
-.tile:hover {
-  cursor: pointer;
-}
-
 .tile:nth-child(1),
 .tile:nth-child(2),
 .tile:nth-child(3) {
