@@ -3,7 +3,7 @@ const humanSelectButton = document.querySelector('#human');
 const robotSelectButton = document.querySelector('#robot');
 const playerOneIndicator = document.querySelector('.player-1');
 const playerTwoIndicator = document.querySelector('.player-2');
-const resultIndicator = document.querySelector('.winner');
+const resultIndicator = document.querySelector('.result');
 const restartButton = document.querySelector('#restart');
 const mainButton = document.querySelector('#main');
 const tiles = document.querySelectorAll('.tile');
@@ -26,39 +26,22 @@ const board = (() => ({
   winningRows: [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9'], ['1', '4', '7'], ['2', '5', '8'], ['3', '6', '9'], ['1', '5', '9'], ['3', '5', '7']],
 
   determineWinner(player) {
-    const rlt = this.winningRows.some(winningRow => winningRow.every(el => player.markers.includes(el))); // winner determining algorithm
-    if (rlt) {
-      this.endTheGame();
-    }
+    return this.winningRows.some(winningRow => winningRow.every(el => player.markers.includes(el))); // winner determining algorithm
   },
 
-  drawTheGame() {
-    resultIndicator.textContent = 'Draw!';
+  endTheGame(result) {
+    const text = result ? `${this.getCurrentPlayer().indicator.textContent} win!` : 'Draw!' // true -> current player wins, false -> draw
+    resultIndicator.textContent = text;
     resultIndicator.classList.add('visible'); // make the indicator visible
-
+    
     tiles.forEach(tile => {
       tile.removeEventListener('click', enableClickEffect);
       tile.removeEventListener('mouseover', enableMouseoverEffect);
       tile.removeEventListener('mouseout', enableMouseoutEffect);
       tile.style.cursor = 'default';
     }) // make tiles non-clickable, set the cursor default
-
-    document.querySelector('.highlighted').classList.remove('highlighted');
-    // hide player indicators
-  },
-
-  endTheGame() {
-    resultIndicator.textContent = `${this.getCurrentPlayer().indicator.textContent} win!`;
-    resultIndicator.classList.add('visible'); // make the indicator visible
-
-    tiles.forEach(tile => {
-      tile.removeEventListener('click', enableClickEffect);
-      tile.removeEventListener('mouseover', enableMouseoverEffect);
-      tile.removeEventListener('mouseout', enableMouseoutEffect);
-      tile.style.cursor = 'default';
-    }) // make tiles non-clickable, set the cursor default
-
-    document.querySelector('.highlighted').classList.remove('highlighted');
+    
+    board.getCurrentPlayer().indicator.classList.remove('highlighted');
     // hide player indicators
   },
 
@@ -67,7 +50,7 @@ const board = (() => ({
 
   flipTurn() {
     this.getCurrentPlayer().indicator.classList.remove('highlighted');
-    this.whoseTurn = !this.turn;
+    this.turn = !this.turn;
     this.getCurrentPlayer().indicator.classList.add('highlighted');
   },
 
@@ -86,10 +69,12 @@ const board = (() => ({
 
 // initialize function
 function initialize() {
+  board.getCurrentPlayer().indicator.classList.remove('highlighted');
   board.turn = Math.random() > 0.5; // randomly choose one of the players
   board.getCurrentPlayer().indicator.classList.add('highlighted');
   [board.players[0].markers, board.players[1].markers] = [[], []];
   board.markers = [];
+  updateDisplay();
   tiles.forEach(tile => {
     tile.addEventListener('click', enableClickEffect);
     tile.addEventListener('mouseover', enableMouseoverEffect);
@@ -131,11 +116,11 @@ restartButton.addEventListener('click', () => {
 
 // back to the main menu
 mainButton.addEventListener('click', () => {
-
+  playerSelectScreen.classList.toggle('slide'); // player select screen slide up animation
+  // board.getCurrentPlayer().indicator.classList.remove('highlighted');// hide player indicators
 });
 
 // tile setup
-
 function updateDisplay() {
   tiles.forEach((tile, idx) => {
     const factor = (idx+1).toString();
@@ -152,15 +137,19 @@ function updateDisplay() {
 
 function enableClickEffect() {
   const number = board.getTileNumber(this);
-  if (!board.markers.includes(number)) {
+  if (!board.markers.includes(number)) { // check if the marker has been selected, it's a string number tho e.g., '5'
     board.markers.push(number);
     board.getCurrentPlayer().markers.push(number);
 
     updateDisplay();
-    
-    board.determineWinner(board.getCurrentPlayer());
-  
-    board.flipTurn();
+
+    if (!board.determineWinner(board.getCurrentPlayer()) && (board.markers.length === 9)) { // check if the winner has been determined
+      board.endTheGame(false); // draw the game
+    } else if (board.determineWinner(board.getCurrentPlayer())) {
+      board.endTheGame(true); // the current player wins
+    } else {
+      board.flipTurn();
+    }
   }
 };
 
